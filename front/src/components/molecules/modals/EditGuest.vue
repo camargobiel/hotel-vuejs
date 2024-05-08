@@ -3,8 +3,16 @@
   import Input from '../../atoms/Input.vue';
   import Button from '../../atoms/Button.vue';
 
+  const emit = defineEmits(["modal-close"]);
+
+  const { guest } = defineProps({
+    isOpen: Boolean,
+    guest: Object
+  })
+
   async function handleSubmit(e) {
     const elements = e.target.elements
+    const id = guest.id
     const name = elements["name"].value
     const email = elements["email"].value
     const cpf = elements["cpf"].value
@@ -12,8 +20,9 @@
 
     try {
       await fetch("http://localhost:4555/guests", {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+          id,
           name,
           email,
           cpf,
@@ -27,11 +36,6 @@
     }
   }
 
-  const emit = defineEmits(["modal-close"]);
-
-  defineProps({
-    isOpen: Boolean
-  })
 </script>
 
 <script>
@@ -51,7 +55,7 @@
 <template>
   <ModalComponent :isOpen="isOpen" @close="closeModal">
     <template #header>
-      <h2 class="text-blue-600 font-semibold">Novo hóspede</h2>
+      <h2 class="text-blue-600 font-semibold">Editar hóspede</h2>
     </template>
     <template #content>
       <form @submit.prevent="handleSubmit">
@@ -60,7 +64,7 @@
             id="name"
             label="Nome do cliente"
             placeholder="Gabriel"
-            :modelValue="name"
+            :modelValue="guest.name"
             @update:modelValue="$event => (name = $event)"
           />
           <div class="flex gap-2 w-full">
@@ -68,14 +72,14 @@
               id="email"
               label="E-mail"
               placeholder="email@gmail.com"
-              :modelValue="email"
+              :modelValue="guest.email"
               @update:modelValue="$event => (email = $event)"
             />
             <Input
               id="cpf"
               label="CPF"
               placeholder="000.000.000-00"
-              :modelValue="cpf"
+              :modelValue="guest.cpf"
               @update:modelValue="$event => (cpf = $event)"
             />
           </div>
@@ -83,20 +87,20 @@
             id="phone"
             label="Telefone"
             placeholder="(00) 0000-0000"
-            :modelValue="phone"
+            :modelValue="guest.phone"
             @update:modelValue="$event => (phone = $event)"
           />
           <Input
             id="address"
             label="Endereço"
             placeholder="Rua das pitangueiras nº 500"
-            :modelValue="address"
+            :modelValue="guest.address"
             @update:modelValue="$event => (address = $event)"
           />
         </div>
         <div class="flex gap-2 justify-end mt-5">
           <Button>
-            <template #button-text>Criar</template>
+            <template #button-text>Salvar</template>
           </Button>
         </div>
       </form>
