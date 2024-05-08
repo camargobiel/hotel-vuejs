@@ -1,10 +1,13 @@
 <script setup>
+  import ErrorMessage from './ErrorMessage.vue'
+
   const props = defineProps({
     id: String,
     label: String,
     placeholder: String,
     modelValue: String,
-    type: String
+    type: String,
+    error: String
   })
   const emit = defineEmits(['update:modelValue'])
 </script>
@@ -19,8 +22,11 @@
       :placeholder="placeholder"
       :value="modelValue"
       @input="emit('update:modelValue', $event.target.value)"
-      class="border border-zinc-200 rounded h-10 px-2 focus:outline-none focus:border-zinc-600 text-sm"
+      :class="`border border-zinc-200 rounded h-10 px-2 focus:outline-none focus:border-zinc-600 text-sm ${error ? 'border-red-500' : ''}`"
     />
+    <ErrorMessage>
+      <template #error-message>{{ error }}</template>
+    </ErrorMessage>
   </div>
 </template>
 

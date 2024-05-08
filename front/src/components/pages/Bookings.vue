@@ -19,6 +19,7 @@
             :is-open="isCreateBookingOpen"
             v-on:modal-close="() => {
               fetchGuests()
+              fetchBookings()
               isCreateBookingOpen = false
             }"
             :guests="guests"
@@ -34,7 +35,7 @@
             </OutlineButton>
           </div>
         </section>
-        <section class="grid sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 px-10 gap-4 min-w-[280px]">
+        <section class="grid sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 px-10 gap-4">
           <div v-for="booking in bookings" :key="booking.id">
             <BookingCard
               :booking={booking}

@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="p-3 border rounded-lg border-zinc-200 flex flex-col gap-5">
+  <div class="p-3 border rounded-lg border-zinc-200 flex flex-col gap-5 min-w-60">
     <EditBooking
       :is-open="isEditBookingOpen"
       v-on:modal-close="() => {

@@ -3,12 +3,17 @@
   import Input from '../../atoms/Input.vue';
   import Button from '../../atoms/Button.vue';
   import Select from '../../atoms/Select.vue'
+  import { bookingValidation } from './validation'
+  import { ref } from 'vue'
+  import { findErrorString } from '../../../utils/find-error-string'
 
   const { guests, booking } = defineProps({
     isOpen: Boolean,
     guests: Array,
     booking: Object
   })
+
+  let formErrors = ref([])
 
   const emit = defineEmits(["modal-close"]);
 
@@ -52,6 +57,7 @@
     }
 
     try {
+      bookingValidation.parse(data)
       await fetch("http://localhost:4555/booking", {
         method: "PUT",
         body: JSON.stringify(data),
@@ -59,7 +65,7 @@
       })
       emit("modal-close")
     } catch(err) {
-      console.log(err)
+      formErrors.value = JSON.parse(err)
     }
   }
 </script>
@@ -92,6 +98,7 @@
             placeholder="12345"
             :modelValue="booking.identifier"
             @update:modelValue="$event => (identifier = $event)"
+            :error="findErrorString('identifier', formErrors)"
           />
           <div class="flex gap-2 w-full">
             <Input
@@ -101,6 +108,7 @@
               type="date"
               :modelValue="booking.startDate"
               @update:modelValue="$event => (startDate = $event)"
+              :error="findErrorString('startDate', formErrors)"
             />
             <Input
               id="endDate"
@@ -109,6 +117,7 @@
               placeholder="25/12/2023"
               :modelValue="booking.endDate"
               @update:modelValue="$event => (endDate = $event)"
+              :error="findErrorString('endDate', formErrors)"
             />
           </div>
           <Select
@@ -117,6 +126,7 @@
             :options="options"
             :modelValue="booking.guestId.toString()"
             @update:modelValue="$event => (guest = $event)"
+            :error="findErrorString('guest', formErrors)"
           />
           <Select
             id="status"
@@ -124,6 +134,7 @@
             :options="statusOptions"
             :modelValue="booking.status"
             @update:modelValue="$event => (status = $event)"
+            :error="findErrorString('status', formErrors)"
           />
         </div>
         <div class="flex gap-2 justify-end mt-5">

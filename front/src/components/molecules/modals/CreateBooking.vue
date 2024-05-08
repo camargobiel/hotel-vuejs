@@ -3,32 +3,11 @@
   import Input from '../../atoms/Input.vue';
   import Button from '../../atoms/Button.vue';
   import Select from '../../atoms/Select.vue'
+  import { bookingValidation } from './validation'
+  import { ref } from 'vue'
+  import { findErrorString } from '../../../utils/find-error-string'
 
-  async function handleSubmit(e) {
-    const elements = e.target.elements
-    const identifier = elements["identifier"].value
-    const startDate = elements["startDate"].value
-    const endDate = elements["endDate"].value
-    const guest = elements["guest"].value
-    const status = elements["status"].value
-
-    try {
-      await fetch("http://localhost:4555/booking", {
-        method: "POST",
-        body: JSON.stringify({
-          identifier,
-          startDate,
-          endDate,
-          guest,
-          status
-        }),
-        headers: { "Content-Type": "application/json" },
-      })
-      emit("modal-close")
-    } catch(err) {
-      console.log(err)
-    }
-  }
+  let formErrors = ref([])
 
   const emit = defineEmits(["modal-close"]);
 
@@ -36,10 +15,12 @@
     isOpen: Boolean,
     guests: Array
   })
+
   const options = guests.map((guest) => ({
     value: guest.id,
     label: guest.name
   }))
+
   const statusOptions = [
     {
       label: "Agendado",
@@ -55,6 +36,34 @@
     },
   ]
 
+  async function handleSubmit(e) {
+    const elements = e.target.elements
+    const identifier = elements["identifier"].value
+    const startDate = elements["startDate"].value
+    const endDate = elements["endDate"].value
+    const guest = elements["guest"].value
+    const status = elements["status"].value
+
+    const data = {
+      identifier,
+      startDate,
+      endDate,
+      guest,
+      status
+    }
+
+    try {
+      bookingValidation.parse(data)
+      await fetch("http://localhost:4555/booking", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      })
+      emit("modal-close")
+    } catch(err) {
+      formErrors.value = JSON.parse(err)
+    }
+  }
 </script>
 
 <script>
@@ -85,6 +94,7 @@
             placeholder="12345"
             :modelValue="identifier"
             @update:modelValue="$event => (identifier = $event)"
+            :error="findErrorString('identifier', formErrors)"
           />
           <div class="flex gap-2 w-full">
             <Input
@@ -94,6 +104,7 @@
               type="date"
               :modelValue="startDate"
               @update:modelValue="$event => (startDate = $event)"
+              :error="findErrorString('startDate', formErrors)"
             />
             <Input
               id="endDate"
@@ -102,6 +113,7 @@
               placeholder="25/12/2023"
               :modelValue="endDate"
               @update:modelValue="$event => (endDate = $event)"
+              :error="findErrorString('endDate', formErrors)"
             />
           </div>
           <Select
@@ -110,6 +122,7 @@
             :options="options"
             :modelValue="guest"
             @update:modelValue="$event => (guest = $event)"
+            :error="findErrorString('guest', formErrors)"
           />
           <Select
             id="status"
@@ -117,6 +130,7 @@
             :options="statusOptions"
             :modelValue="status"
             @update:modelValue="$event => (status = $event)"
+            :error="findErrorString('status', formErrors)"
           />
         </div>
         <div class="flex gap-2 justify-end mt-5">

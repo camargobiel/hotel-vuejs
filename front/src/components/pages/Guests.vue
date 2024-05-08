@@ -34,7 +34,7 @@
           </div>
         </section>
         <section class="grid sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 px-10 gap-4 min-w-[280px]">
-          <div v-for="guest in guests" :key="guest.id" class="">
+          <div v-for="guest in guests" :key="guest.id">
             <GuestCard :guest={guest} :fetchGuests="fetchGuests" />
           </div>
         </section>

@@ -2,7 +2,11 @@
   import ModalComponent from './ModalComponent.vue';
   import Input from '../../atoms/Input.vue';
   import Button from '../../atoms/Button.vue';
+  import { guestValidation } from './validation'
+  import { findErrorString } from '../../../utils/find-error-string'
+  import { ref } from 'vue'
 
+  let formErrors = ref([])
   const emit = defineEmits(["modal-close"]);
 
   const { guest } = defineProps({
@@ -18,21 +22,24 @@
     const cpf = elements["cpf"].value
     const address = elements["address"].value
 
+    const data = {
+      id,
+      name,
+      email,
+      cpf,
+      address
+    }
+
     try {
+      guestValidation.parse(data)
       await fetch("http://localhost:4555/guests", {
         method: "PUT",
-        body: JSON.stringify({
-          id,
-          name,
-          email,
-          cpf,
-          address
-        }),
+        body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       })
       emit("modal-close")
     } catch(err) {
-      console.log(err)
+      formErrors.value = JSON.parse(err)
     }
   }
 
@@ -66,6 +73,7 @@
             placeholder="Gabriel"
             :modelValue="guest.name"
             @update:modelValue="$event => (name = $event)"
+            :error="findErrorString('name', formErrors)"
           />
           <div class="flex gap-2 w-full">
             <Input
@@ -74,6 +82,7 @@
               placeholder="email@gmail.com"
               :modelValue="guest.email"
               @update:modelValue="$event => (email = $event)"
+              :error="findErrorString('email', formErrors)"
             />
             <Input
               id="cpf"
@@ -81,6 +90,7 @@
               placeholder="000.000.000-00"
               :modelValue="guest.cpf"
               @update:modelValue="$event => (cpf = $event)"
+              :error="findErrorString('cpf', formErrors)"
             />
           </div>
           <Input
@@ -89,6 +99,7 @@
             placeholder="(00) 0000-0000"
             :modelValue="guest.phone"
             @update:modelValue="$event => (phone = $event)"
+            :error="findErrorString('phone', formErrors)"
           />
           <Input
             id="address"
@@ -96,6 +107,7 @@
             placeholder="Rua das pitangueiras nº 500"
             :modelValue="guest.address"
             @update:modelValue="$event => (address = $event)"
+            :error="findErrorString('address', formErrors)"
           />
         </div>
         <div class="flex gap-2 justify-end mt-5">
