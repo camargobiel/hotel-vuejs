@@ -2,9 +2,8 @@
   const props = defineProps({
     id: String,
     label: String,
-    placeholder: String,
+    options: Array,
     modelValue: String,
-    type: String
   })
   const emit = defineEmits(['update:modelValue'])
 </script>
@@ -12,15 +11,17 @@
 <template>
   <div class="flex flex-col gap-2 w-full">
     <label :for="id" class="text-sm">{{label}}</label>
-    <input
+    <select
       :id="id"
-      :type="type || 'text'"
       :name="id"
-      :placeholder="placeholder"
       :value="modelValue"
-      @input="emit('update:modelValue', $event.target.value)"
-      class="border border-zinc-200 rounded h-10 px-2 focus:outline-none focus:border-zinc-600 text-sm"
-    />
+      @change="emit('update:modelValue', $event.target.value)"
+      class="p-2 cursor-pointer rounded bg-white border border-zinc-200"
+    >
+      <option v-for="option in options" :value="option.value" :key="option.value">
+        {{ option.label }}
+      </option>
+    </select>
   </div>
 </template>
 

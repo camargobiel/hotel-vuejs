@@ -2,6 +2,7 @@
   import CreateGuest from "../molecules/modals/CreateGuest.vue"
   import GuestCard from '../molecules/GuestCard.vue'
   import OutlineButton from "../atoms/OutlineButton.vue";
+  import Page from "../templates/Page.vue";
 
   import { ref } from 'vue'
 
@@ -9,33 +10,37 @@
 </script>
 
 <template>
-  <main>
-    <section class="p-10">
-      <CreateGuest
-        v-if="isCreateGuestOpen"
-        :is-open="isCreateGuestOpen"
-        v-on:modal-close="() => {
-          fetchGuests()
-          isCreateGuestOpen = false
-        }"
-      />
-      <div class="flex items-center gap-10">
-        <h2 class="text-2xl text-blue-600 font-semibold">Hóspedes</h2>
-        <OutlineButton
-          @click="() => {
-            isCreateGuestOpen = true
-          }"
-        >
-          <template #button-text>Novo hóspede</template>
-        </OutlineButton>
-      </div>
-    </section>
-    <section class="grid sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 px-10 gap-4 min-w-[280px]">
-      <div v-for="guest in guests" :key="guest.id" class="">
-        <GuestCard :guest={guest} :fetchGuests="fetchGuests" />
-      </div>
-    </section>
-  </main>
+  <Page>
+    <template #page>
+      <main>
+        <section class="p-10">
+          <CreateGuest
+            v-if="isCreateGuestOpen"
+            :is-open="isCreateGuestOpen"
+            v-on:modal-close="() => {
+              fetchGuests()
+              isCreateGuestOpen = false
+            }"
+          />
+          <div class="flex items-center gap-10">
+            <h2 class="text-2xl text-blue-600 font-semibold">Hóspedes</h2>
+            <OutlineButton
+              @click="() => {
+                isCreateGuestOpen = true
+              }"
+            >
+              <template #button-text>Novo hóspede</template>
+            </OutlineButton>
+          </div>
+        </section>
+        <section class="grid sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 px-10 gap-4 min-w-[280px]">
+          <div v-for="guest in guests" :key="guest.id" class="">
+            <GuestCard :guest={guest} :fetchGuests="fetchGuests" />
+          </div>
+        </section>
+      </main>
+    </template>
+  </Page>
 </template>
 
 <script>

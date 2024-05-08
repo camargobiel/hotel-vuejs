@@ -30,7 +30,7 @@
   const emit = defineEmits(["modal-close"]);
 
   defineProps({
-    isOpen: Boolean
+    isOpen: Boolean,
   })
 </script>
 
