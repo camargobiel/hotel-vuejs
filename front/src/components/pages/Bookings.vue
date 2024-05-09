@@ -80,8 +80,8 @@
       }
     },
     async beforeMount() {
-      await this.fetchBookings()
       await this.fetchGuests()
+      await this.fetchBookings()
     },
   }
 </script>

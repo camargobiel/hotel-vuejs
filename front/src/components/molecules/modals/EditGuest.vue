@@ -21,13 +21,15 @@
     const email = elements["email"].value
     const cpf = elements["cpf"].value
     const address = elements["address"].value
+    const phone = elements["phone"].value
 
     const data = {
       id,
       name,
       email,
       cpf,
-      address
+      address,
+      phone
     }
 
     try {
@@ -71,7 +73,7 @@
             id="name"
             label="Nome do cliente"
             placeholder="Gabriel"
-            :modelValue="guest.name"
+            :modelValue="name || guest.name"
             @update:modelValue="$event => (name = $event)"
             :error="findErrorString('name', formErrors)"
           />
@@ -80,7 +82,7 @@
               id="email"
               label="E-mail"
               placeholder="email@gmail.com"
-              :modelValue="guest.email"
+              :modelValue="email || guest.email"
               @update:modelValue="$event => (email = $event)"
               :error="findErrorString('email', formErrors)"
             />
@@ -88,16 +90,16 @@
               id="cpf"
               label="CPF"
               placeholder="000.000.000-00"
-              :modelValue="guest.cpf"
+              :modelValue="cpf || guest.cpf"
               @update:modelValue="$event => (cpf = $event)"
               :error="findErrorString('cpf', formErrors)"
             />
           </div>
           <Input
             id="phone"
-            label="Telefone"
+            label="Telefone com DDD"
             placeholder="(00) 0000-0000"
-            :modelValue="guest.phone"
+            :modelValue="phone || guest.phone"
             @update:modelValue="$event => (phone = $event)"
             :error="findErrorString('phone', formErrors)"
           />
@@ -105,7 +107,7 @@
             id="address"
             label="Endereço"
             placeholder="Rua das pitangueiras nº 500"
-            :modelValue="guest.address"
+            :modelValue="address || guest.address"
             @update:modelValue="$event => (address = $event)"
             :error="findErrorString('address', formErrors)"
           />

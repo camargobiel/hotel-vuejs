@@ -11,16 +11,20 @@ class BookingsRepository {
   }
 
   async create(data) {
-    const booking = await db(this.table).insert({
-      identifier: data.identifier,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      status: data.status
-    }).returning("id")
-    const guestsBooking = await db("guests-bookings").insert({
-      guestId: Number(data.guest),
-      bookingId: booking[0].id
-    }).returning("*")
+    const booking = await db(this.table)
+      .insert({
+        identifier: data.identifier,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        status: data.status
+      })
+      .returning("id")
+    const guestsBooking = await db("guests-bookings")
+      .insert({
+        guestId: Number(data.guest),
+        bookingId: booking[0].id
+      })
+      .returning("*")
     return guestsBooking
   }
 

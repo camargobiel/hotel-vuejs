@@ -19,12 +19,14 @@
     const email = elements["email"].value
     const cpf = elements["cpf"].value
     const address = elements["address"].value
+    const phone = elements["phone"].value
 
     const data = {
       name,
       email,
       cpf,
-      address
+      address,
+      phone
     }
 
     try {
@@ -91,7 +93,7 @@
           </div>
           <Input
             id="phone"
-            label="Telefone"
+            label="Telefone com DDD"
             placeholder="(00) 0000-0000"
             :modelValue="phone"
             @update:modelValue="$event => (phone = $event)"
