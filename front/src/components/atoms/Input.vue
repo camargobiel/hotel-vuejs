@@ -22,7 +22,7 @@
       :placeholder="placeholder"
       :value="modelValue"
       @input="emit('update:modelValue', $event.target.value)"
-      :class="`border border-zinc-200 rounded h-10 px-2 focus:outline-none focus:border-zinc-600 text-sm ${error ? 'border-red-500' : ''}`"
+      :class="`border rounded h-10 px-2 focus:outline-none focus:border-zinc-600 text-sm ${error ? 'border-red-500' : 'border-zinc-200'}`"
     />
     <ErrorMessage>
       <template #error-message>{{ error }}</template>

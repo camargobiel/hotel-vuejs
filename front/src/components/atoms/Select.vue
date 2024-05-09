@@ -19,7 +19,7 @@
       :name="id"
       :value="modelValue"
       @change="emit('update:modelValue', $event.target.value)"
-      :class="`p-2 cursor-pointer rounded bg-white border border-zinc-200 ${error ? 'border-red-500' : ''}`"
+      :class="`p-2 cursor-pointer rounded bg-white border ${error ? 'border-red-500' : 'border-zinc-200'}`"
     >
       <option v-for="option in options" :value="option.value" :key="option.value">
         {{ option.label }}
